@@ -21,22 +21,37 @@
 package othername
 
 import (
-	"fmt"
-
+	"crypto/x509"
 	"encoding/asn1"
+	"fmt"
 )
 
 // Encapsulation of an x509 Subject Alternative Name (SAN) Other Name.
 //
 // This contains an ObjectIdentifier Id for the OtherName type, and the
-// opaque type dependent RawValue.
+// opaque type dependent RawValue. This type is pretty hard to work with
+// and will likely involve some calls to asn1.Unmarshal to extract the
+// meaningful data, so be sure you feel comfortable with that before
+// digging into Value!
 type OtherName struct {
-	Id    asn1.ObjectIdentifier
+	// ObjectIdentifier defining what type of information is contained
+	// inside the Value object. There's basically no reason to read the
+	// Value without first checking the ObjectIdentifier.
+	Id asn1.ObjectIdentifier
+
+	// Type-specific information regarding this particular OtherName.
 	Value asn1.RawValue
 }
 
+// Unmarshal the payload bytes inside the Value into an interface.
+func (o OtherName) Unmarshal(target interface{}) ([]byte, error) {
+	return asn1.Unmarshal(o.Value.Bytes, target)
+}
+
+//
 type OtherNames []OtherName
 
+// Find all OtherNames that have the ObjectIdentifier provided.
 func (o OtherNames) Find(id asn1.ObjectIdentifier) OtherNames {
 	ret := OtherNames{}
 	for _, on := range o {
@@ -47,8 +62,8 @@ func (o OtherNames) Find(id asn1.ObjectIdentifier) OtherNames {
 	return ret
 }
 
-//
-//
+// Given a Certificate, go through all the Extensions, find the SubjectAltName
+// Extension, and extract all OtherNames from the SAN.
 func ParseOtherNames(cert *x509.Certificate) (OtherNames, error) {
 	for _, extension := range cert.Extensions {
 		if extension.Id.Equal(oidSubjectAltName) {

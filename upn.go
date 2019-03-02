@@ -27,7 +27,7 @@ import (
 	"encoding/asn1"
 )
 
-// Extract the Universal Principal Name
+// Extract all Universal Principal Names from an x509 Certificate.
 func UPNs(cert *x509.Certificate) ([]string, error) {
 	ons, err := ParseOtherNames(cert)
 	if err != nil {
@@ -36,17 +36,14 @@ func UPNs(cert *x509.Certificate) ([]string, error) {
 	return ons.UPNs()
 }
 
-//
-//
-//
+// Extract the Universal Principal Name from this OtherName.
 func (on OtherName) UPN() (string, error) {
 	if !on.Id.Equal(oidUPN) {
 		return "", fmt.Errorf("san: OtherName.UPN: Wrong ObjectIdentifier for a UPN")
 	}
 
-	bytes := on.Value.Bytes
 	upn := asn1.RawValue{}
-	bytes, err := asn1.Unmarshal(bytes, &upn)
+	bytes, err := on.Unmarshal(&upn)
 	if err != nil {
 		return "", err
 	}
@@ -58,16 +55,37 @@ func (on OtherName) UPN() (string, error) {
 	return string(upn.Bytes), nil
 }
 
+// Type of Function accepted by the OtherNames.Map helper.
+type MapFunc func(OtherName) error
+
+// Map a function over all OtherNames. This is helpful when paired with Find
+// to do a custom extraction for each OtherName.
+func (ons OtherNames) Map(mf MapFunc) error {
+	for _, on := range ons {
+		if err := mf(on); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Extract all Universal Principal Names from a list of OtherNames.
 func (on OtherNames) UPNs() ([]string, error) {
 	ret := []string{}
-	upns := on.Find(oidUPN)
-	for _, upn := range upns {
-		name, err := upn.UPN()
+
+	err := on.Find(oidUPN).Map(func(on OtherName) error {
+		name, err := on.UPN()
 		if err != nil {
-			return nil, err
+			return err
 		}
 		ret = append(ret, name)
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
 	}
+
 	return ret, nil
 }
 

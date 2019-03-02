@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"pault.ag/go/san"
+	"pault.ag/go/othername"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 			panic(err)
 		}
 
-		names, err := san.UPNs(cert)
+		names, err := othername.UPNs(cert)
 		if err != nil {
 			panic(err)
 		}

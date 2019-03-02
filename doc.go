@@ -18,7 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE. }}}
 
-// The SAN package parses and extracts OtherName entries
+// The othername package is able to parse custom OtherName entries out of a
+// crypto/x509.Certificate, and present a slightly lower level representation
+// of what data is contained in the Certificate.
+//
+// The primary use of this package currently is to extract a Microsoft Universal
+// Principal Name from an crypto/x509.Certificate. As other needs come up, this
+// package will grow support for other OtherNames as needed.
 package othername
 
 // vim: foldmethod=marker
