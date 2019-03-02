@@ -25,16 +25,24 @@ func main() {
 		_ = block
 		cert, err := x509.ParseCertificate(bytes)
 		if err != nil {
-			panic(err)
+			continue
 		}
+
+		fmt.Printf("Serial: %x\n", cert.SerialNumber)
+		fmt.Printf(" CN: %s\n", cert.Subject.CommonName)
 
 		names, err := othername.UPNs(cert)
 		if err != nil {
 			panic(err)
 		}
-
 		for _, name := range names {
-			fmt.Printf("%s\n", name)
+			fmt.Printf(" UPN: %s\n", name)
 		}
+
+		for _, email := range cert.EmailAddresses {
+			fmt.Printf(" Email: %s\n", email)
+		}
+
+		fmt.Printf("\n")
 	}
 }
