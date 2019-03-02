@@ -1,39 +1,27 @@
-package upn
+package san
 
 import (
+	"fmt"
+
 	"crypto/x509"
 	"encoding/asn1"
-	"fmt"
 )
 
-//
-func From(cert *x509.Certificate) ([]string, error) {
-	ret := []string{}
-
-	for _, extension := range cert.Extensions {
-		if extension.Id.Equal(oidSubjectAltName) {
-			ons, err := ParseOtherNames(extension.Value)
-			if err != nil {
-				return nil, err
-			}
-
-			for _, on := range ons {
-				if on.Id.Equal(oidUPN) {
-					name, err := ParseUPN(on)
-					if err != nil {
-						return nil, err
-					}
-					ret = append(ret, name)
-				}
-			}
-		}
+// Extract the Universal Principal Name
+func UPNs(cert *x509.Certificate) ([]string, error) {
+	ons, err := ParseOtherNames(cert)
+	if err != nil {
+		return nil, err
 	}
-	return ret, nil
+	return ons.UPNs()
 }
 
-func ParseUPN(on OtherName) (string, error) {
+//
+//
+//
+func (on OtherName) UPN() (string, error) {
 	if !on.Id.Equal(oidUPN) {
-		return "", fmt.Errorf("other name upn broken")
+		return "", fmt.Errorf("san: OtherName.UPN: Wrong ObjectIdentifier for a UPN")
 	}
 
 	bytes := on.Value.Bytes
@@ -44,8 +32,21 @@ func ParseUPN(on OtherName) (string, error) {
 	}
 
 	if len(bytes) != 0 {
-		return "", fmt.Errorf("other name short bytes")
+		return "", fmt.Errorf("san: OtherName.UPN: Trailing bytes")
 	}
 
 	return string(upn.Bytes), nil
+}
+
+func (on OtherNames) UPNs() ([]string, error) {
+	ret := []string{}
+	upns := on.Find(oidUPN)
+	for _, upn := range upns {
+		name, err := upn.UPN()
+		if err != nil {
+			return nil, err
+		}
+		ret = append(ret, name)
+	}
+	return ret, nil
 }

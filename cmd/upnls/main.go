@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"pault.ag/go/upn"
+	"pault.ag/go/san"
 )
 
 func main() {
@@ -28,9 +28,13 @@ func main() {
 			panic(err)
 		}
 
-		upns, err := upn.From(cert)
-		for _, upn := range upns {
-			fmt.Printf("%s\n", upn)
+		names, err := san.UPNs(cert)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, name := range names {
+			fmt.Printf("%s\n", name)
 		}
 	}
 }
