@@ -53,9 +53,9 @@ func getElement(entries [][]int, index int, length int) []int {
 // very very very very fragle. this needs serious help
 func Unpack(entries [][]int) (*FASC, error) {
 	ret := FASC{
-		AgencyCode:                  getElement(entries, 0, 4),
-		SystemCode:                  getElement(entries, 1, 4),
-		Credential:                  getElement(entries, 2, 6),
+		AgencyCode:                  rehydrateNumber(getElement(entries, 0, 4)),
+		SystemCode:                  rehydrateNumber(getElement(entries, 1, 4)),
+		Credential:                  rehydrateNumber(getElement(entries, 2, 6)),
 		CredentialSeries:            getElement(entries, 3, 1)[0],
 		IndidvidualCredentialSeries: getElement(entries, 4, 1)[0],
 	}
@@ -63,7 +63,7 @@ func Unpack(entries [][]int) (*FASC, error) {
 	rest := entries[5]
 	ret.PersonIdentifier = rehydrateNumber(rest[:10])
 	ret.OrganizationCategory = OrganizationalCategory(rest[10])
-	ret.OrganizationIdentifier = rest[11:15]
+	ret.OrganizationIdentifier = rehydrateNumber(rest[11:15])
 	ret.PersonAssociation = AssociationCategory(rest[15])
 
 	return &ret, nil
@@ -79,15 +79,15 @@ func rehydrateNumber(in []int) int {
 }
 
 type FASC struct {
-	AgencyCode                  []int
-	SystemCode                  []int
-	Credential                  []int
+	AgencyCode                  int
+	SystemCode                  int
+	Credential                  int
 	CredentialSeries            int
 	IndidvidualCredentialSeries int
 
 	PersonIdentifier       int
 	OrganizationCategory   OrganizationalCategory
-	OrganizationIdentifier []int
+	OrganizationIdentifier int
 	PersonAssociation      AssociationCategory
 }
 

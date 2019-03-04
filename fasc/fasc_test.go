@@ -1,9 +1,9 @@
 package fasc_test
 
 import (
+	"fmt"
 	"io"
 	"log"
-	"reflect"
 	"testing"
 
 	"pault.ag/go/othername/fasc"
@@ -49,13 +49,13 @@ func TestExampleEntry(t *testing.T) {
 	})
 	isok(t, err)
 
-	assert(t, reflect.DeepEqual(f.AgencyCode, []int{0, 0, 3, 2}))
-	assert(t, reflect.DeepEqual(f.SystemCode, []int{0, 0, 0, 1}))
-	assert(t, reflect.DeepEqual(f.Credential, []int{0, 9, 2, 4, 4, 6}))
+	assert(t, f.AgencyCode == 32)
+	assert(t, f.SystemCode == 1)
+	assert(t, f.Credential == 92446)
 	assert(t, f.CredentialSeries == 0)
 	assert(t, f.IndidvidualCredentialSeries == 1)
 	assert(t, f.PersonIdentifier == 1112223333)
 	assert(t, f.OrganizationCategory == fasc.OrganizationalCategoryFederalGoverment)
-	assert(t, reflect.DeepEqual(f.OrganizationIdentifier, []int{1, 2, 2, 3}))
+	assert(t, f.OrganizationIdentifier == 1223)
 	assert(t, f.PersonAssociation == fasc.AssociationCategoryCivil)
 }
