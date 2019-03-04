@@ -61,12 +61,21 @@ func Unpack(entries [][]int) (*FASC, error) {
 	}
 
 	rest := entries[5]
-	ret.PersonIdentifier = rest[:10]
+	ret.PersonIdentifier = rehydrateNumber(rest[:10])
 	ret.OrganizationCategory = OrganizationalCategory(rest[10])
 	ret.OrganizationIdentifier = rest[11:15]
 	ret.PersonAssociation = AssociationCategory(rest[15])
 
 	return &ret, nil
+}
+
+func rehydrateNumber(in []int) int {
+	ret := 0
+	for _, el := range in {
+		ret *= 10
+		ret = ret + el
+	}
+	return ret
 }
 
 type FASC struct {
@@ -76,7 +85,7 @@ type FASC struct {
 	CredentialSeries            int
 	IndidvidualCredentialSeries int
 
-	PersonIdentifier       []int
+	PersonIdentifier       int
 	OrganizationCategory   OrganizationalCategory
 	OrganizationIdentifier []int
 	PersonAssociation      AssociationCategory

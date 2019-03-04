@@ -54,7 +54,7 @@ func TestExampleEntry(t *testing.T) {
 	assert(t, reflect.DeepEqual(f.Credential, []int{0, 9, 2, 4, 4, 6}))
 	assert(t, f.CredentialSeries == 0)
 	assert(t, f.IndidvidualCredentialSeries == 1)
-	assert(t, reflect.DeepEqual(f.PersonIdentifier, []int{1, 1, 1, 2, 2, 2, 3, 3, 3, 3}))
+	assert(t, f.PersonIdentifier == 1112223333)
 	assert(t, f.OrganizationCategory == fasc.OrganizationalCategoryFederalGoverment)
 	assert(t, reflect.DeepEqual(f.OrganizationIdentifier, []int{1, 2, 2, 3}))
 	assert(t, f.PersonAssociation == fasc.AssociationCategoryCivil)
