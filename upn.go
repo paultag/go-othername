@@ -29,7 +29,7 @@ import (
 
 // Extract all Universal Principal Names from an x509 Certificate.
 func UPNs(cert *x509.Certificate) ([]string, error) {
-	ons, err := ParseOtherNames(cert)
+	ons, err := All(cert)
 	if err != nil {
 		return nil, err
 	}

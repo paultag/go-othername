@@ -73,7 +73,7 @@ func (o OtherNames) Find(id asn1.ObjectIdentifier) OtherNames {
 
 // Given a Certificate, go through all the Extensions, find the SubjectAltName
 // Extension, and extract all OtherNames from the SAN.
-func ParseOtherNames(cert *x509.Certificate) (OtherNames, error) {
+func All(cert *x509.Certificate) (OtherNames, error) {
 	for _, extension := range cert.Extensions {
 		if extension.Id.Equal(oidSubjectAltName) {
 			ons, err := otherNamesFromSANBytes(extension.Value)
