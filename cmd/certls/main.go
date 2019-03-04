@@ -39,11 +39,11 @@ func main() {
 		for _, oname := range onames.Find(
 			asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 6, 6},
 		) {
-			fasc, err := oname.FASCN()
+			fasc, err := oname.FASC()
 			if err != nil {
 				panic(err)
 			}
-			fmt.Printf(" FASC: %d\n", len(fasc))
+			fmt.Printf(" FASC: %s\n", fasc)
 		}
 
 		names, err := othername.UPNs(cert)

@@ -1,4 +1,4 @@
-package bitvector
+package bdc
 
 // A bitslice is an array of bits. This allows us to slice and re-interpret
 // the bits, regardless of how they got to us.
@@ -65,7 +65,7 @@ func NewBitSlice() BitSlice {
 }
 
 //
-func Decode(data []byte) (*BitSlice, error) {
+func NewBitSliceFromBytes(data []byte) (*BitSlice, error) {
 	b := NewBitSlice()
 	for _, el := range data {
 		b.AppendByte(el, 8)

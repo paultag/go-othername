@@ -24,10 +24,10 @@ import (
 	"encoding/asn1"
 	"fmt"
 
-	"pault.ag/go/othername/internal/fasc"
+	"pault.ag/go/othername/fasc"
 )
 
-func (on OtherName) FASCN() ([]byte, error) {
+func (on OtherName) FASC() (*fasc.FASC, error) {
 	if !on.Id.Equal(oidFASCN) {
 		return nil, InvalidOID
 	}
@@ -47,14 +47,7 @@ func (on OtherName) FASCN() ([]byte, error) {
 	// 	0x68, 0x5a, 0x10, 0x82, 0x10, 0x8c, 0xe7, 0x39, 0x84, 0x10, 0x8c, 0xa3,
 	// 	0xf5,
 	// })
-	fasc, err := fasc.Parse(rv.Bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Printf("%s\n", fasc)
-
-	return nil, nil
+	return fasc.Parse(rv.Bytes)
 }
 
 // vim: foldmethod=marker

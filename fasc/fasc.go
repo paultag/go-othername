@@ -3,7 +3,7 @@ package fasc
 import (
 	"fmt"
 
-	"pault.ag/go/othername/internal/bdc"
+	"pault.ag/go/othername/fasc/internal/bdc"
 )
 
 func Parse(data []byte) (*FASC, error) {
