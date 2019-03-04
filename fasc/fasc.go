@@ -26,6 +26,8 @@ import (
 	"pault.ag/go/othername/fasc/internal/bdc"
 )
 
+// Parse packed 8-bit-byte FASC blobs into a FASC struct containing the parsed
+// information.
 func Parse(data []byte) (*FASC, error) {
 	numbers, err := bdc.Parse(data)
 	if err != nil {
@@ -38,6 +40,7 @@ func Parse(data []byte) (*FASC, error) {
 	return Unpack(groups)
 }
 
+// Extract FASC int streams into chunks based on field seperrators.
 func Group(values []int) ([][]int, error) {
 	if values[0] != 11 {
 		return nil, fmt.Errorf("fasc: start byte isn't 1101")
@@ -59,9 +62,6 @@ func Group(values []int) ([][]int, error) {
 	return ret, nil
 }
 
-// SS AGENCY CODE + FS SYSTEM CODE + FS CREDENTIAL NUMBER + FS CS + FS ICI + FS
-// PI + OC + OI + POA + ES + LRC
-
 func getElement(entries [][]int, index int, length int) []int {
 	ret := entries[index]
 	if len(ret) != length {
@@ -70,7 +70,7 @@ func getElement(entries [][]int, index int, length int) []int {
 	return ret
 }
 
-// very very very very fragle. this needs serious help
+// Unpack the list of lists into a FASC Struct.
 func Unpack(entries [][]int) (*FASC, error) {
 	ret := FASC{
 		AgencyCode:                  AgencyCode(rehydrateNumber(getElement(entries, 0, 4))),

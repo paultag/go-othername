@@ -20,7 +20,10 @@
 
 package fasc
 
+//
 type OrganizationalCategory int
+
+//
 type AssociationCategory int
 
 const (
