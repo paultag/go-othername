@@ -26,6 +26,15 @@ import (
 	"fmt"
 )
 
+var (
+	// InvalidOID is returned when the expected OID doesn't match
+	// the given OID. For instance, if the OtherName is a custom
+	// type, and we're trying to extract the UPN, this error would
+	// be returned to signify that the parser code will not attempt to
+	// unpack the Value.
+	InvalidOID = fmt.Errorf("othername: expected OID didn't match")
+)
+
 // Encapsulation of an x509 Subject Alternative Name (SAN) Other Name.
 //
 // This contains an ObjectIdentifier Id for the OtherName type, and the
@@ -126,7 +135,7 @@ func otherNameFromBytes(bytes []byte) (*OtherName, error) {
 	}
 
 	if len(bytes) != 0 {
-		return nil, fmt.Errorf("san: other name contains trailing bytes")
+		return nil, fmt.Errorf("othername: entry contains trailing bytes")
 	}
 
 	return &OtherName{

@@ -39,7 +39,7 @@ func UPNs(cert *x509.Certificate) ([]string, error) {
 // Extract the Universal Principal Name from this OtherName.
 func (on OtherName) UPN() (string, error) {
 	if !on.Id.Equal(oidUPN) {
-		return "", fmt.Errorf("san: OtherName.UPN: Wrong ObjectIdentifier for a UPN")
+		return "", InvalidOID
 	}
 
 	upn := asn1.RawValue{}
@@ -49,7 +49,7 @@ func (on OtherName) UPN() (string, error) {
 	}
 
 	if len(bytes) != 0 {
-		return "", fmt.Errorf("san: OtherName.UPN: Trailing bytes")
+		return "", fmt.Errorf("othername: OtherName.UPN: Trailing bytes")
 	}
 
 	return string(upn.Bytes), nil
