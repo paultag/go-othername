@@ -59,5 +59,6 @@ func main() {
 		}
 
 		fmt.Printf("\n")
+		fd.Close()
 	}
 }
