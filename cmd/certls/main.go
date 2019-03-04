@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/x509"
+	"encoding/asn1"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
@@ -30,6 +31,20 @@ func main() {
 
 		fmt.Printf("Serial: %x\n", cert.SerialNumber)
 		fmt.Printf(" CN: %s\n", cert.Subject.CommonName)
+
+		onames, err := othername.All(cert)
+		if err != nil {
+			panic(err)
+		}
+		for _, oname := range onames.Find(
+			asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 6, 6},
+		) {
+			fasc, err := oname.FASCN()
+			if err != nil {
+				panic(err)
+			}
+			fmt.Printf(" FASC: %d\n", len(fasc))
+		}
 
 		names, err := othername.UPNs(cert)
 		if err != nil {
