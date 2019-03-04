@@ -6,6 +6,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"pault.ag/go/othername"
@@ -26,6 +27,7 @@ func main() {
 		_ = block
 		cert, err := x509.ParseCertificate(bytes)
 		if err != nil {
+			log.Println(err)
 			continue
 		}
 
