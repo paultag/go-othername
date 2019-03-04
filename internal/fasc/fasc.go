@@ -62,9 +62,9 @@ func Unpack(entries [][]int) (*FASC, error) {
 
 	rest := entries[5]
 	ret.PersonIdentifier = rest[:10]
-	ret.OrganizationCategory = rest[10]
+	ret.OrganizationCategory = OrganizationalCategory(rest[10])
 	ret.OrganizationIdentifier = rest[11:15]
-	ret.PersonAssociation = rest[15]
+	ret.PersonAssociation = AssociationCategory(rest[15])
 
 	return &ret, nil
 }
@@ -77,22 +77,22 @@ type FASC struct {
 	IndidvidualCredentialSeries int
 
 	PersonIdentifier       []int
-	OrganizationCategory   int
+	OrganizationCategory   OrganizationalCategory
 	OrganizationIdentifier []int
-	PersonAssociation      int
+	PersonAssociation      AssociationCategory
 }
 
 func (f FASC) String() string {
 	return fmt.Sprintf(
-		"agency=%d system=%d credential=%d credentialSeries=%d ics=%d pi=%d oc=%d oi=%d assoc=%d",
+		"agency=%d system=%d credential=%d credentialSeries=%d ics=%d pi=%d oc=%s oi=%d assoc=%s",
 		f.AgencyCode,
 		f.SystemCode,
 		f.Credential,
 		f.CredentialSeries,
 		f.IndidvidualCredentialSeries,
 		f.PersonIdentifier,
-		f.OrganizationCategory,
+		f.OrganizationCategory.String(),
 		f.OrganizationIdentifier,
-		f.PersonAssociation,
+		f.PersonAssociation.String(),
 	)
 }
