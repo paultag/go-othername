@@ -37,7 +37,8 @@ var (
 	// single-valued.
 	oidUPN = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 311, 20, 2, 3}
 
-	//
+	// FASC or Federal Agency Smartcard Number, is information relating to the
+	// PIV cardholder.
 	oidFASCN = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 6, 6}
 )
 
