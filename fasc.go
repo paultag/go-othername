@@ -27,6 +27,8 @@ import (
 	"pault.ag/go/othername/fasc"
 )
 
+// Decode and parse the FASC (Federal Agency Smartcard Number). This contains
+// some basic information on the PIV token that this Certificate belongs to.
 func (on OtherName) FASC() (*fasc.FASC, error) {
 	if !on.Id.Equal(oidFASCN) {
 		return nil, InvalidOID
@@ -42,11 +44,6 @@ func (on OtherName) FASC() (*fasc.FASC, error) {
 		return nil, fmt.Errorf("othername: OtherName.UPN: Trailing bytes")
 	}
 
-	// fasc, err := fasc.Parse([]byte{
-	// 	0xd0, 0x43, 0x94, 0x58, 0x21, 0xc, 0x2c, 0x19, 0xa0, 0x84, 0x6d, 0x83,
-	// 	0x68, 0x5a, 0x10, 0x82, 0x10, 0x8c, 0xe7, 0x39, 0x84, 0x10, 0x8c, 0xa3,
-	// 	0xf5,
-	// })
 	return fasc.Parse(rv.Bytes)
 }
 
