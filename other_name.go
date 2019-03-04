@@ -144,4 +144,18 @@ func otherNameFromBytes(bytes []byte) (*OtherName, error) {
 	}, nil
 }
 
+// Type of Function accepted by the OtherNames.Map helper.
+type MapFunc func(OtherName) error
+
+// Map a function over all OtherNames. This is helpful when paired with Find
+// to do a custom extraction for each OtherName.
+func (ons OtherNames) Map(mf MapFunc) error {
+	for _, on := range ons {
+		if err := mf(on); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // vim: foldmethod=marker
