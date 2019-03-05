@@ -21,11 +21,39 @@
 package othername
 
 import (
+	"crypto/x509"
 	"encoding/asn1"
 	"fmt"
 
 	"pault.ag/go/othername/fasc"
 )
+
+func FASCs(cert *x509.Certificate) ([]fasc.FASC, error) {
+	ons, err := All(cert)
+	if err != nil {
+		return nil, err
+	}
+	return ons.FASCs()
+}
+
+func (on OtherNames) FASCs() ([]fasc.FASC, error) {
+	ret := []fasc.FASC{}
+
+	err := on.Find(oidFASCN).Map(func(on OtherName) error {
+		name, err := on.FASC()
+		if err != nil {
+			return err
+		}
+		ret = append(ret, *name)
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
 
 // Decode and parse the FASC (Federal Agency Smartcard Number). This contains
 // some basic information on the PIV token that this Certificate belongs to.
