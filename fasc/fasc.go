@@ -33,15 +33,15 @@ func Parse(data []byte) (*FASC, error) {
 	if err != nil {
 		return nil, err
 	}
-	groups, err := Group(numbers)
+	groups, err := group(numbers)
 	if err != nil {
 		return nil, err
 	}
-	return Unpack(groups)
+	return unpack(groups)
 }
 
 // Extract FASC int streams into chunks based on field seperrators.
-func Group(values []int) ([][]int, error) {
+func group(values []int) ([][]int, error) {
 	if values[0] != 11 {
 		return nil, fmt.Errorf("fasc: start byte isn't 1101")
 	}
@@ -70,8 +70,8 @@ func getElement(entries [][]int, index int, length int) []int {
 	return ret
 }
 
-// Unpack the list of lists into a FASC Struct.
-func Unpack(entries [][]int) (*FASC, error) {
+// unpack the list of lists into a FASC Struct.
+func unpack(entries [][]int) (*FASC, error) {
 	ret := FASC{
 		AgencyCode:                  AgencyCode(rehydrateNumber(getElement(entries, 0, 4))),
 		SystemCode:                  rehydrateNumber(getElement(entries, 1, 4)),
