@@ -99,16 +99,72 @@ func rehydrateNumber(in []int) int {
 }
 
 type FASC struct {
-	AgencyCode                  AgencyCode
-	SystemCode                  int
-	Credential                  int
-	CredentialSeries            int
+	// Agency Code identifies what Government agnecy issued the credential.
+	// This is usually a FIPS 95-2 federal agency code. An incomplete table
+	// of these values is provided in this library, but this type is just a
+	// retyped Int, direct access of the underlying value is encouraged.
+	AgencyCode AgencyCode
+
+	// Identifies the system the card is enrolled in.
+	SystemCode int
+
+	// Unique for the given system. This plus the system and agency code should
+	// be a unique identifier for this token.
+	Credential int
+
+	// Major version changes in the data above.
+	CredentialSeries int
+
+	// Individual incrementing counter for the number of times a card has been
+	// replaced due to loss or damage.
 	IndidvidualCredentialSeries int
 
-	PersonIdentifier       int
-	OrganizationCategory   OrganizationalCategory
+	// Unique identifier for an individual. This is sometimes a fairly low
+	// incrementing identifier for the ACL system, and other times it's an
+	// agency-wide globally unique identifier such as an EDIPI.
+	PersonIdentifier int
+
+	// Type of orgnaization that the cardholder belongs to.
+	//
+	// A table of values is provided in this library, but this is a masked
+	// integer in the event you need direct access. It's likely easier to
+	// set up a switch statement using the defined constants on this, though.
+	//
+	// Valid values here are:
+	//
+	//  - Federal Government Agency
+	//  - State Government Agency
+	//  - Commercial Enterprise
+	//  - Foreign Government
+	//
+	OrganizationCategory OrganizationalCategory
+
+	// For the particular category above, this is an iditifier to determine
+	// which agency, state, company or government this cardholder is a part
+	// of.
+	//
+	// Given a Federal Government Agency, this will be a FIPS 95-2 agency code.
+	// Given a State Government Agency, this will be a State Code.
+	// Given a Commercial Enterprise, this will be a Company Code
+	// Given a Foreign Government, this will be a Country Code.
 	OrganizationIdentifier int
-	PersonAssociation      AssociationCategory
+
+	// What the relation of this person to the above organization is.
+	//
+	// This is a masked int, and direct access to the underlying value may
+	// be helpful, but it may be more helpful to use the defined constants.
+	//
+	// Valid values here are:
+	//
+	//  - Employee
+	//  - Civil
+	//  - Executive Staff
+	//  - Uniformed Service
+	//  - Contractor
+	//  - Organizational Affiliate
+	//  - Organizational Beneficiary
+	//
+	PersonAssociation AssociationCategory
 }
 
 func (f FASC) String() string {
