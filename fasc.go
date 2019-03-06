@@ -28,6 +28,8 @@ import (
 	"pault.ag/go/othername/fasc"
 )
 
+// Return all FASC entries from this Certificate, parsed into a fasc.FASC
+// struct.
 func FASCs(cert *x509.Certificate) ([]fasc.FASC, error) {
 	ons, err := All(cert)
 	if err != nil {
@@ -36,6 +38,7 @@ func FASCs(cert *x509.Certificate) ([]fasc.FASC, error) {
 	return ons.FASCs()
 }
 
+// Get all FASC entries in the set of OtherNames this function hangs off of.
 func (on OtherNames) FASCs() ([]fasc.FASC, error) {
 	ret := []fasc.FASC{}
 
