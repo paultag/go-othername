@@ -177,7 +177,7 @@ func (f FASC) String() string {
 		f.IndidvidualCredentialSeries,
 		f.PersonIdentifier,
 		f.OrganizationCategory.String(),
-		f.OrganizationIdentifier,
+		f.OrganizationIdentifier.String(),
 		f.PersonAssociation.String(),
 	)
 }
