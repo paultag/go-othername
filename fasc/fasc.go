@@ -169,7 +169,7 @@ type FASC struct {
 
 func (f FASC) String() string {
 	return fmt.Sprintf(
-		"agency=%s system=%d credential=%d credentialSeries=%d ics=%d pi=%d oc=%s oi=%d assoc=%s",
+		"agency=%s system=%d credential=%d credentialSeries=%d ics=%d pi=%d oc=%s oi=%s assoc=%s",
 		f.AgencyCode.String(),
 		f.SystemCode,
 		f.Credential,
