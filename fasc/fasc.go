@@ -83,7 +83,7 @@ func unpack(entries [][]int) (*FASC, error) {
 	rest := entries[5]
 	ret.PersonIdentifier = rehydrateNumber(rest[:10])
 	ret.OrganizationCategory = OrganizationalCategory(rest[10])
-	ret.OrganizationIdentifier = rehydrateNumber(rest[11:15])
+	ret.OrganizationIdentifier = AgencyCode(rehydrateNumber(rest[11:15]))
 	ret.PersonAssociation = AssociationCategory(rest[15])
 
 	return &ret, nil
