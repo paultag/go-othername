@@ -147,7 +147,7 @@ type FASC struct {
 	// Given a State Government Agency, this will be a State Code.
 	// Given a Commercial Enterprise, this will be a Company Code
 	// Given a Foreign Government, this will be a Country Code.
-	OrganizationIdentifier int
+	OrganizationIdentifier AgencyCode
 
 	// What the relation of this person to the above organization is.
 	//
