@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE. }}}
 
-package fasc
+package fasc // import "pault.ag/go/othername/fasc"
 
 //
 type OrganizationalCategory int

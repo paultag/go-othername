@@ -25,6 +25,6 @@
 // The primary use of this package currently is to extract a Microsoft Universal
 // Principal Name from an crypto/x509.Certificate. As other needs come up, this
 // package will grow support for other OtherNames as needed.
-package othername
+package othername // import "pault.ag/go/othername"
 
 // vim: foldmethod=marker

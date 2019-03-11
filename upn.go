@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE. }}}
 
-package othername
+package othername // import "pault.ag/go/othername"
 
 import (
 	"fmt"
