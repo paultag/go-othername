@@ -25,7 +25,7 @@ import (
 	"encoding/asn1"
 	"fmt"
 
-	"pault.ag/go/othername/fasc"
+	"pault.ag/go/fasc"
 )
 
 // Return all FASC entries from this Certificate, parsed into a fasc.FASC
