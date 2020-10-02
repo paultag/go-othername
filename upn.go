@@ -27,7 +27,7 @@ import (
 	"encoding/asn1"
 )
 
-// Extract all Universal Principal Names from an x509 Certificate.
+// UPNs will extract all Universal Principal Names from an x509 Certificate.
 func UPNs(cert *x509.Certificate) ([]string, error) {
 	ons, err := All(cert)
 	if err != nil {
@@ -36,10 +36,10 @@ func UPNs(cert *x509.Certificate) ([]string, error) {
 	return ons.UPNs()
 }
 
-// Extract the Universal Principal Name from this OtherName.
+// UPN will extract and return the Universal Principal Name.
 func (on OtherName) UPN() (string, error) {
-	if !on.Id.Equal(oidUPN) {
-		return "", InvalidOID
+	if !on.ID.Equal(oidUPN) {
+		return "", ErrInvalidOID
 	}
 
 	upn := asn1.RawValue{}
@@ -55,7 +55,8 @@ func (on OtherName) UPN() (string, error) {
 	return string(upn.Bytes), nil
 }
 
-// Extract all Universal Principal Names from a list of OtherNames.
+// UPNs will extract and return all Universal Principal Names from a list of
+// OtherNames.
 func (on OtherNames) UPNs() ([]string, error) {
 	ret := []string{}
 

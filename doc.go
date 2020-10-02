@@ -18,9 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE. }}}
 
-// The othername package is able to parse custom OtherName entries out of a
-// crypto/x509.Certificate, and present a slightly lower level representation
-// of what data is contained in the Certificate.
+// Package othername parses custom OtherName entries out of a
+// crypto/x509.Certificate, and extracts those values.
 //
 // The primary use of this package currently is to extract a Microsoft Universal
 // Principal Name from an crypto/x509.Certificate. As other needs come up, this

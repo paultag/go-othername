@@ -27,15 +27,16 @@ import (
 )
 
 var (
-	// InvalidOID is returned when the expected OID doesn't match
+	// ErrInvalidOID is returned when the expected OID doesn't match
 	// the given OID. For instance, if the OtherName is a custom
 	// type, and we're trying to extract the UPN, this error would
 	// be returned to signify that the parser code will not attempt to
 	// unpack the Value.
-	InvalidOID = fmt.Errorf("othername: expected OID didn't match")
+	ErrInvalidOID error = fmt.Errorf("othername: expected OID didn't match")
 )
 
-// Encapsulation of an x509 Subject Alternative Name (SAN) Other Name.
+// OtherName is an encapsulation of an x509 Subject Alternative Name (SAN)
+// Other Name.
 //
 // This contains an ObjectIdentifier Id for the OtherName type, and the
 // opaque type dependent RawValue. This type is pretty hard to work with
@@ -46,7 +47,7 @@ type OtherName struct {
 	// ObjectIdentifier defining what type of information is contained
 	// inside the Value object. There's basically no reason to read the
 	// Value without first checking the ObjectIdentifier.
-	Id asn1.ObjectIdentifier
+	ID asn1.ObjectIdentifier
 
 	// Type-specific information regarding this particular OtherName.
 	Value asn1.RawValue
@@ -57,22 +58,22 @@ func (o OtherName) Unmarshal(target interface{}) ([]byte, error) {
 	return asn1.Unmarshal(o.Value.Bytes, target)
 }
 
-//
+// OtherNames is an enumeration of a collection of OtherName entries.
 type OtherNames []OtherName
 
 // Find all OtherNames that have the ObjectIdentifier provided.
 func (o OtherNames) Find(id asn1.ObjectIdentifier) OtherNames {
 	ret := OtherNames{}
 	for _, on := range o {
-		if on.Id.Equal(id) {
+		if on.ID.Equal(id) {
 			ret = append(ret, on)
 		}
 	}
 	return ret
 }
 
-// Given a Certificate, go through all the Extensions, find the SubjectAltName
-// Extension, and extract all OtherNames from the SAN.
+// All will extract all OtherName entries from the provided Certificate's
+// SAN entries,and return them.
 func All(cert *x509.Certificate) (OtherNames, error) {
 	for _, extension := range cert.Extensions {
 		if extension.Id.Equal(oidSubjectAltName) {
@@ -139,18 +140,19 @@ func otherNameFromBytes(bytes []byte) (*OtherName, error) {
 	}
 
 	return &OtherName{
-		Id:    id,
+		ID:    id,
 		Value: rv,
 	}, nil
 }
 
-// Type of Function accepted by the OtherNames.Map helper.
+// MapFunc can be used to run a snippit of code against all OtherName objects
+// through the use of OtherNames.Map.
 type MapFunc func(OtherName) error
 
 // Map a function over all OtherNames. This is helpful when paired with Find
 // to do a custom extraction for each OtherName.
-func (ons OtherNames) Map(mf MapFunc) error {
-	for _, on := range ons {
+func (o OtherNames) Map(mf MapFunc) error {
+	for _, on := range o {
 		if err := mf(on); err != nil {
 			return err
 		}

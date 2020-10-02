@@ -28,8 +28,8 @@ import (
 	"pault.ag/go/fasc"
 )
 
-// Return all FASC entries from this Certificate, parsed into a fasc.FASC
-// struct.
+// FASCs will return all FASC entries from this Certificate, parsed into a
+// fasc.FASC struct.
 func FASCs(cert *x509.Certificate) ([]fasc.FASC, error) {
 	ons, err := All(cert)
 	if err != nil {
@@ -38,7 +38,7 @@ func FASCs(cert *x509.Certificate) ([]fasc.FASC, error) {
 	return ons.FASCs()
 }
 
-// Get all FASC entries in the set of OtherNames this function hangs off of.
+// FASCs will get all FASC entries contained within the OtherNames.
 func (on OtherNames) FASCs() ([]fasc.FASC, error) {
 	ret := []fasc.FASC{}
 
@@ -58,11 +58,11 @@ func (on OtherNames) FASCs() ([]fasc.FASC, error) {
 	return ret, nil
 }
 
-// Decode and parse the FASC (Federal Agency Smartcard Number). This contains
-// some basic information on the PIV token that this Certificate belongs to.
+// FASC will decode and parse the FASC (Federal Agency Smartcard Number). This
+// contains some basic information on the PIV token that this Certificate belongs to.
 func (on OtherName) FASC() (*fasc.FASC, error) {
-	if !on.Id.Equal(oidFASCN) {
-		return nil, InvalidOID
+	if !on.ID.Equal(oidFASCN) {
+		return nil, ErrInvalidOID
 	}
 
 	rv := asn1.RawValue{}
